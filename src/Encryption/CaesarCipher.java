@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class CaesarCipher {
 
     private Scanner keyboard;
-    private String prevEncryption = "";
-    private int key;
+    private String prevEncryption = ""; //To 'save' the previously encrypted String.
+    private int key; //The key to decipher the message.
 
     public CaesarCipher() {
         keyboard = new Scanner(System.in);
@@ -46,7 +46,7 @@ public class CaesarCipher {
     }
 
     public void decrypt() {
-        if(!prevEncryption.equals(""))
+        if(!prevEncryption.equals("")) //Use saved encryption.
         {
             System.out.print("Use previously encrypted message?(y/n): ");
             String option = keyboard.nextLine();
@@ -90,23 +90,23 @@ public class CaesarCipher {
             if(asciiValue >= 65 && asciiValue <= 90)
             {
                 asciiValue += shift;
-                if(asciiValue >= 65 && asciiValue <= 90)
+                if(asciiValue >= 65 && asciiValue <= 90) //Capital letters.
                 {
                     shiftedPhrase += (char)asciiValue;
                 }
-                else if(asciiValue > 90)
+                else if(asciiValue > 90) //If the value goes beyond 'Z'.
                 {
                     shiftedPhrase += (char)((asciiValue - 90) + 64);
                 }
             }
-            else if(asciiValue >= 97 && asciiValue <= 122)
+            else if(asciiValue >= 97 && asciiValue <= 122) //Lowercase letters.
             {
                 asciiValue += shift;
                 if(asciiValue >= 97 && asciiValue <= 122)
                 {
                     shiftedPhrase += (char)asciiValue;
                 }
-                else if(asciiValue > 122)
+                else if(asciiValue > 122) //If the value goes beyond 'z'.
                 {
                     shiftedPhrase += (char)((asciiValue - 122) + 96);
                 }

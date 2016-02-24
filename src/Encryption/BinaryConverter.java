@@ -85,5 +85,6 @@ public class BinaryConverter {
             BinaryConverter bc = new BinaryConverter(keyboard.nextLine(), false);
             System.out.println(bc.toString());
         }
+        keyboard.close();
     }
 }

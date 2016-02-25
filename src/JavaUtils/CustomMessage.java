@@ -1,4 +1,4 @@
-package Encryption;
+package JavaUtils;
 
 import java.util.Scanner;
 import javax.swing.*;

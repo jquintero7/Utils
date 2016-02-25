@@ -1,6 +1,4 @@
-package JavaTools;
-
-import java.util.Random;
+package JavaUtils;
 
 public class Example {
 

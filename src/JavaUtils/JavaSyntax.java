@@ -1,4 +1,4 @@
-package JavaTools;
+package JavaUtils;
 
 public class JavaSyntax {
 

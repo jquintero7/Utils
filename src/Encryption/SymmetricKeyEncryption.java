@@ -1,7 +1,6 @@
 package Encryption;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -75,18 +74,19 @@ public class SymmetricKeyEncryption {
         System.out.print("Enter the message to encrypt: ");
         message = keyboard.nextLine();
         messageLength = message.length();
+        generatePADKey(); //Create the randomized PAD Key.
 
-        generateKeyPAD();
+        //Apply the encrypting algorithm for SymmetricKeyEncryption.
         String encryptedMessage = "";
         int PADCount = 0;
-        for(int key : charDict.keySet())
+        for(int count = 0; count < messageLength; count++)
         {
-            for(int count = 0; count < messageLength; count++)
+            for(int key : charDict.keySet())
             {
                 if(message.charAt(count) == charDict.get(key))
                 {
-                    int newKey = key + keyPAD[PADCount];
-                    newKey = newKey > dictSize ? newKey - dictSize : newKey;
+                    int newKey = key + keyPAD[PADCount]; //Add the generated PAD Key.
+                    newKey = newKey > dictSize ? newKey - dictSize : newKey; //Check for results over the character count.
                     encryptedMessage += charDict.get(newKey);
                     PADCount++;
                 }
@@ -104,21 +104,26 @@ public class SymmetricKeyEncryption {
         System.out.print("Enter a message to decrypt: ");
         message = keyboard.nextLine();
         messageLength = message.length();
+
+        //Separate the PAD Key by it's delimiter.
         System.out.print("Enter the PAD key: ");
         String PAD = keyboard.nextLine().trim();
-
-        String PADStrings[] = PAD.split(String.valueOf(PAD.charAt(2)));
+        String PADStrings[] = PAD.split(/*String.valueOf(PAD.charAt(2))*/ " ");
         if(PADStrings.length != message.length())
         {
-            System.out.println("That PAD Key is not valid for this message.");
+            System.out.println("Message length and PAD key length need to match!" +
+                                "\nMessage length: " + messageLength +
+                                "\nPAD Key length: " + PADStrings.length);
             System.exit(0);
         }
-
+        //Convert the Strings into integers.
         keyPAD = new int[PADStrings.length];
         for(int count = 0; count < PADStrings.length; count++)
         {
             keyPAD[count] = Integer.parseInt(PADStrings[count]);
         }
+
+        //Apply the decrypting algorithm for SymmetricKeyEncryption.
         String decryptedMessage = "";
         int PADCount = 0;
         for(int count = 0; count < messageLength; count++)
@@ -127,12 +132,8 @@ public class SymmetricKeyEncryption {
             {
                 if(message.charAt(count) == charDict.get(key))
                 {
-                    //System.out.println(count + " " + message.charAt(count) + " " + charDict.get(key) + " " + key);
-                    System.out.print(key + " - " + keyPAD[PADCount] + " = ");
-                    int newkey = key - keyPAD[PADCount];
-                    System.out.print(newkey + " + " + charDict.size() + " = ");
-                    newkey = newkey < 1 ? newkey + dictSize : newkey;
-                    System.out.println(newkey);
+                    int newkey = key - keyPAD[PADCount]; //Generate the new key by subtracting the PAD.
+                    newkey = newkey < 1 ? newkey + dictSize : newkey; //Check for results under the character count.
                     decryptedMessage += charDict.get(newkey);
                     PADCount++;
                 }
@@ -141,23 +142,7 @@ public class SymmetricKeyEncryption {
         System.out.println(decryptedMessage);
     }
 
-    /**
-     * Method to get the key from a value in a HashMap
-     * @param hashMap the HashMap.
-     * @param value the value being used to get the key..
-     * @return the value's key.
-     */
-    private Object getKeyFromValue(Map hashMap, Object value) {
-        for (Object key : hashMap.keySet())
-        {
-            if(hashMap.get(key).equals(value))
-                return key;
-        }
-        return null;
-    }
-
-
-    private void generateKeyPAD() {
+    private void generatePADKey() {
         Random random = new Random();
         int maxValue = charDict.size();
         keyPAD = new int[messageLength];

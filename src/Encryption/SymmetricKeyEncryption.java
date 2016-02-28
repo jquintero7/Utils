@@ -16,8 +16,9 @@ public class SymmetricKeyEncryption {
     private String message;
     private int messageLength;
     private int[] messageNumbers;
-    private int[] key;
+    private int[] keyPAD;
     private HashMap<Integer, Character> charDict;
+    private int dictSize;
 
     public SymmetricKeyEncryption() {
         createDictionary();
@@ -63,6 +64,10 @@ public class SymmetricKeyEncryption {
         charDict.put(charValue, (char)63); //?
         charValue++;
         charDict.put(charValue, (char)45); //-
+        charValue++;
+        charDict.put(charValue, (char)95); //_
+
+        dictSize = charDict.size();
     }
 
     private void encrypt() {
@@ -70,33 +75,57 @@ public class SymmetricKeyEncryption {
         message = keyboard.nextLine();
         messageLength = message.length();
         messageNumbers = new int[messageLength];
-        generateKey();
-        for(int i = 0; i < messageLength; i++)
+
+        generateKeyPAD();
+        String encryptedMessage = "";
+        int PADcount = 0;
+        for (int key : charDict.keySet())
         {
-            for (Map.Entry<Integer, Character> entry: charDict.entrySet())
+            for(int count = 0; count < messageLength; count++)
             {
-                if(entry.getValue().equals(message.charAt(i)))
+                if(message.charAt(count) == charDict.get(key))
                 {
-                    System.out.println(charDict.get(i) + " " + entry.getKey());
+                    int newkey = key + keyPAD[PADcount];
+                    newkey = newkey > dictSize ? newkey - dictSize : newkey;
+                    encryptedMessage += charDict.get(newkey);
+                    PADcount++;
                 }
             }
         }
+        System.out.println(encryptedMessage);
     }
 
     private void decrypt() {
 
     }
 
-    private void generateKey() {
+    /**
+     * Method to get the key from a value in a HashMap
+     * @param hashMap the HashMap.
+     * @param value the value being used to get the key..
+     * @return the value's key.
+     */
+    private Object getKeyFromValue(Map hashMap, Object value) {
+        for (Object key : hashMap.keySet())
+        {
+            if(hashMap.get(key).equals(value))
+                return key;
+        }
+        return null;
+    }
+
+
+    private void generateKeyPAD() {
         Random random = new Random();
         int maxValue = charDict.size();
-        key = new int[messageLength];
+        keyPAD = new int[messageLength];
 
         for(int i = 0; i < messageLength; i++)
         {
-            key[i] = random.nextInt(maxValue) + 1;
+            keyPAD[i] = random.nextInt(maxValue) + 1;
         }
     }
+
     public static void main(String[] args) {
         new SymmetricKeyEncryption();
     }

@@ -15,7 +15,6 @@ public class SymmetricKeyEncryption {
     private Scanner keyboard;
     private String message;
     private int messageLength;
-    private int[] messageNumbers;
     private int[] keyPAD;
     private HashMap<Integer, Character> charDict;
     private int dictSize;
@@ -53,11 +52,13 @@ public class SymmetricKeyEncryption {
             charDict.put(charValue, (char)i);
             charValue++;
         }
-        //Add commonly used punctuation.
+        //Add commonly used punctuation and space.
         charValue++;
         charDict.put(charValue, (char)46); //.
         charValue++;
         charDict.put(charValue, (char)44); //,
+        charValue++;
+        charDict.put(charValue, (char)32); //Space
         charValue++;
         charDict.put(charValue, (char)33); //!
         charValue++;
@@ -74,29 +75,70 @@ public class SymmetricKeyEncryption {
         System.out.print("Enter the message to encrypt: ");
         message = keyboard.nextLine();
         messageLength = message.length();
-        messageNumbers = new int[messageLength];
 
         generateKeyPAD();
         String encryptedMessage = "";
-        int PADcount = 0;
-        for (int key : charDict.keySet())
+        int PADCount = 0;
+        for(int key : charDict.keySet())
         {
             for(int count = 0; count < messageLength; count++)
             {
                 if(message.charAt(count) == charDict.get(key))
                 {
-                    int newkey = key + keyPAD[PADcount];
-                    newkey = newkey > dictSize ? newkey - dictSize : newkey;
-                    encryptedMessage += charDict.get(newkey);
-                    PADcount++;
+                    int newKey = key + keyPAD[PADCount];
+                    newKey = newKey > dictSize ? newKey - dictSize : newKey;
+                    encryptedMessage += charDict.get(newKey);
+                    PADCount++;
                 }
             }
         }
         System.out.println(encryptedMessage);
+        for(int i : keyPAD)
+        {
+            System.out.print(i + " ");
+        }
+        System.out.print("\n");
     }
 
     private void decrypt() {
+        System.out.print("Enter a message to decrypt: ");
+        message = keyboard.nextLine();
+        messageLength = message.length();
+        System.out.print("Enter the PAD key: ");
+        String PAD = keyboard.nextLine().trim();
 
+        String PADStrings[] = PAD.split(String.valueOf(PAD.charAt(2)));
+        if(PADStrings.length != message.length())
+        {
+            System.out.println("That PAD Key is not valid for this message.");
+            System.exit(0);
+        }
+
+        keyPAD = new int[PADStrings.length];
+        for(int count = 0; count < PADStrings.length; count++)
+        {
+            keyPAD[count] = Integer.parseInt(PADStrings[count]);
+        }
+        String decryptedMessage = "";
+        int PADCount = 0;
+        for(int count = 0; count < messageLength; count++)
+        {
+            for(int key : charDict.keySet())
+            {
+                if(message.charAt(count) == charDict.get(key))
+                {
+                    //System.out.println(count + " " + message.charAt(count) + " " + charDict.get(key) + " " + key);
+                    System.out.print(key + " - " + keyPAD[PADCount] + " = ");
+                    int newkey = key - keyPAD[PADCount];
+                    System.out.print(newkey + " + " + charDict.size() + " = ");
+                    newkey = newkey < 1 ? newkey + dictSize : newkey;
+                    System.out.println(newkey);
+                    decryptedMessage += charDict.get(newkey);
+                    PADCount++;
+                }
+            }
+        }
+        System.out.println(decryptedMessage);
     }
 
     /**

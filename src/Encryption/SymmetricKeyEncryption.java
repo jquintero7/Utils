@@ -52,7 +52,6 @@ public class SymmetricKeyEncryption {
             charValue++;
         }
         //Add commonly used punctuation and space.
-        charValue++;
         charDict.put(charValue, (char)46); //.
         charValue++;
         charDict.put(charValue, (char)44); //,

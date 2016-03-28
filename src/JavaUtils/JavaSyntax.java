@@ -19,7 +19,27 @@ public class JavaSyntax {
     }
 
     public static void lambdaExpresson() {
-        //(null) -> System.out.println("Zero argumets.");
+        Message test1 = message ->
+                System.out.println("Hello " + message);
+        Message test2 = (message) ->
+                System.out.println("Hello " + message + ", this is a lambda!!");
+        test1.printMessage("World");
+        test2.printMessage("World");
+
+        Math operation1 = (int firstNum, int secondNum) ->
+                System.out.println(firstNum + secondNum);
+        Math operation2 = (int num1, int num2) ->
+                System.out.println(num1 * num2);
+        operation1.openrate(5, 2);
+        operation2.openrate(7, 7);
+    }
+
+    interface Message {
+        void printMessage(String message);
+    }
+
+    interface Math {
+        void openrate(int numb1, int num2);
     }
 
 }

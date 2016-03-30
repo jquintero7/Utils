@@ -3,8 +3,23 @@ package JavaUtils;
 public class JavaSyntax {
 
     public static void main(String[] args) {
+        //varArgs();
         //ternaryOperator();
         lambdaExpresson();
+    }
+
+    public static void varArgs() {
+        int[] firstList = {1, 2, 3, 4, 5, 6, 7};
+        int[] secondList = {10, 100, 1000, 10000};
+        printLists(firstList);
+        printLists(secondList);
+    }
+
+    private static void printLists(int... numbers) {
+        for(int num : numbers)
+        {
+            System.out.println(num);
+        }
     }
 
     public static void ternaryOperator() {
@@ -30,8 +45,8 @@ public class JavaSyntax {
                 System.out.println(firstNum + secondNum);
         Math operation2 = (int num1, int num2) ->
                 System.out.println(num1 * num2);
-        operation1.openrate(5, 2);
-        operation2.openrate(7, 7);
+        operation1.operate(5, 2);
+        operation2.operate(7, 7);
     }
 
     interface Message {
@@ -39,7 +54,7 @@ public class JavaSyntax {
     }
 
     interface Math {
-        void openrate(int numb1, int num2);
+        void operate(int numb1, int num2);
     }
 
 }

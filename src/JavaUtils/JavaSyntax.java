@@ -5,7 +5,26 @@ public class JavaSyntax {
     public static void main(String[] args) {
         //varArgs();
         //ternaryOperator();
-        lambdaExpresson();
+        //lambdaExpresson();
+        //numericalLiteral();
+        stringSwitch();
+    }
+
+    public static void numericalLiteral() {
+        int million = 1_000_000; //Just for the sake of readability.
+        System.out.println(million);
+    }
+
+    public static void stringSwitch() {
+        String word = "Hello";
+        switch(word) {
+            case "Goodbye":
+                System.out.println("Goodbye");
+                break;
+            case "Hello":
+                System.out.println("Hello");
+                break;
+        }
     }
 
     public static void varArgs() {
